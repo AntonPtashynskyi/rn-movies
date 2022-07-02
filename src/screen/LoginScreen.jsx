@@ -1,25 +1,50 @@
-import { Inter_100Thin } from "@expo-google-fonts/inter";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 import {
   View,
   Text,
   StyleSheet,
   TextInput,
   TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 
-export const LoginScreen = () => {
+import { setAuthName } from "../../redux/authSlice";
+
+export default function LoginScreen() {
+  const [name, setName] = useState("");
+  const dispatch = useDispatch();
+
+  const handleLogIn = () => {
+    dispatch(setAuthName(name));
+    Keyboard.dismiss();
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.formTitle}>Enter your name</Text>
-      <View style={styles.loginFormWrapper}>
-        <TextInput style={styles.input} textAlign="center" />
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>LET'S GO</Text>
-        </TouchableOpacity>
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <View style={styles.container}>
+        <Text style={styles.formTitle}>Enter your name</Text>
+        <View style={styles.loginFormWrapper}>
+          <TextInput
+            style={styles.input}
+            textAlign="center"
+            autoCapitalize={"characters"}
+            onChangeText={(value) => setName(value)}
+            value={name}
+          />
+          <TouchableOpacity
+            style={styles.button}
+            activeOpacity={0.5}
+            onPress={handleLogIn}
+          >
+            <Text style={styles.buttonText}>LET'S GO</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
-};
+}
 
 const styles = StyleSheet.create({
   formTitle: {

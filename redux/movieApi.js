@@ -32,5 +32,5 @@ export const movieApi = createApi({
 export const {
   useFetchPopularMoviesQuery,
   useFetchSearchMoviesQuery,
-  useLazyFetchMovieDetailsQuery,
+  useFetchMovieDetailsQuery,
 } = movieApi;

@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 
@@ -5,75 +6,107 @@ import {
   StyleSheet,
   Text,
   View,
-  ImageBackground,
   TextInput,
   TouchableOpacity,
   Platform,
   KeyboardAvoidingView,
   Keyboard,
   TouchableWithoutFeedback,
+  ScrollView,
 } from "react-native";
+
+import { useFetchSearchMoviesQuery } from "../../redux/movieApi";
+import { MovieCard } from "./MovieCard";
+import { Inter_100Thin, Inter_200ExtraLight } from "@expo-google-fonts/inter";
 
 export default function SearchScreen() {
   const [inputValue, setInputValue] = useState("");
+  const { name } = useSelector((state) => state.name);
+  const data = useFetchSearchMoviesQuery(inputValue);
+
+  let movies;
+
+  if (data?.currentData) {
+    movies = data.currentData.results;
+  }
 
   const keyBoardHide = () => {
     Keyboard.dismiss();
-    setInputValue("");
-    console.log(inputValue);
   };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={styles.container}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
-        >
-          <View style={styles.inputWrapper}>
-            <Text style={styles.inputTitle}>Movies DB</Text>
-            <View style={styles.inputButtonWrapper}>
-              <TextInput
-                style={styles.input}
-                value={inputValue}
-                onChangeText={(value) => {
-                  setInputValue(value);
-                }}
-              />
-              <TouchableOpacity
-                style={styles.button}
-                activeOpacity={0.7}
-                onPress={keyBoardHide}
-              >
-                <Text
-                  style={{
-                    fontFamily: "sans-serif",
-                    color: "#fff",
+      <View style={{ alignItems: "center" }}>
+        <View style={styles.searchContainer}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+          >
+            <View style={styles.inputWrapper}>
+              <Text style={styles.inputTitle}>Hi, {name}</Text>
+              <View style={styles.inputButtonWrapper}>
+                <TextInput
+                  style={styles.input}
+                  value={inputValue}
+                  onChangeText={(value) => {
+                    setInputValue(value);
                   }}
+                />
+                <TouchableOpacity
+                  style={styles.button}
+                  activeOpacity={0.7}
+                  onPress={keyBoardHide}
                 >
-                  SEARCH
-                </Text>
-              </TouchableOpacity>
+                  <Text
+                    style={{
+                      fontFamily: "sans-serif",
+                      color: "#fff",
+                    }}
+                  >
+                    SEARCH
+                  </Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        </KeyboardAvoidingView>
+          </KeyboardAvoidingView>
 
-        <StatusBar style="auto" />
+          <StatusBar style="auto" />
+          <View style={styles.moviesContainer}>
+            {data && (
+              <ScrollView
+                style={styles.scrollView}
+                contentContainerStyle={styles.scrollViewContainer}
+                showsVerticalScrollIndicator={false}
+              >
+                {movies &&
+                  movies.map((item) => (
+                    <MovieCard movie={item} key={item.id} />
+                  ))}
+              </ScrollView>
+            )}
+          </View>
+        </View>
       </View>
     </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  scrollView: {
     flex: 1,
-    backgroundColor: "#fff",
   },
-
+  moviesContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    marginLeft: 10,
+  },
+  searchContainer: {},
   inputWrapper: {
     opacity: 1,
     marginHorizontal: 20,
     marginVertical: 10,
     justifyContent: "flex-start",
+    alignItems: "center",
   },
 
   inputButtonWrapper: {
@@ -104,8 +137,8 @@ const styles = StyleSheet.create({
 
   button: {
     borderWidth: 1,
-
     backgroundColor: "#6495ed",
+    borderColor: "#6495ed",
     height: 40,
     width: 100,
     borderRadius: 5,
@@ -114,5 +147,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 0,
+  },
+  scrollViewContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
   },
 });
