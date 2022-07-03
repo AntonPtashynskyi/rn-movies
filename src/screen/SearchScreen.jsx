@@ -13,21 +13,21 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 
 import { useFetchSearchMoviesQuery } from "../../redux/movieApi";
 import { MovieCard } from "./MovieCard";
-import { Inter_100Thin, Inter_200ExtraLight } from "@expo-google-fonts/inter";
 
 export default function SearchScreen() {
   const [inputValue, setInputValue] = useState("");
   const { name } = useSelector((state) => state.name);
-  const data = useFetchSearchMoviesQuery(inputValue);
+  const { data, isLoading } = useFetchSearchMoviesQuery(inputValue);
 
   let movies;
 
-  if (data?.currentData) {
-    movies = data.currentData.results;
+  if (data) {
+    movies = data.results;
   }
 
   const keyBoardHide = () => {
@@ -36,7 +36,7 @@ export default function SearchScreen() {
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={{ alignItems: "center" }}>
+      <View style={{ alignItems: "center", marginTop: 50 }}>
         <View style={styles.searchContainer}>
           <KeyboardAvoidingView
             behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -66,6 +66,7 @@ export default function SearchScreen() {
                   </Text>
                 </TouchableOpacity>
               </View>
+              {isLoading && <Text style={styles.motto}> Let's search</Text>}
             </View>
           </KeyboardAvoidingView>
 
@@ -151,5 +152,9 @@ const styles = StyleSheet.create({
   scrollViewContainer: {
     flexDirection: "row",
     flexWrap: "wrap",
+  },
+  motto: {
+    marginTop: 200,
+    fontSize: 16,
   },
 });

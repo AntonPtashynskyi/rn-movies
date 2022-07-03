@@ -8,9 +8,12 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-import SearchScreen from "../screen/SearchScreen";
-import PopularMovies from "../../src/screen/PopularMovies";
 import LoginScreen from "../../src/screen/LoginScreen";
+import {
+  SearchAndDetailsScreenNavigation,
+  PopularAndDetailsScreenNavigation,
+} from "./SearchAndDetailsScreenNavigation";
+import { HomeScreen } from "../screen/HomeScreen";
 
 export const useRoute = () => {
   const { name } = useSelector((state) => state.name);
@@ -30,8 +33,9 @@ export const useRoute = () => {
     <Tab.Navigator>
       <Tab.Screen
         name="Search movies"
-        component={SearchScreen}
+        component={SearchAndDetailsScreenNavigation}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused, size, color }) => (
             <FontAwesome name="search" size={size} color={color} />
           ),
@@ -39,10 +43,20 @@ export const useRoute = () => {
       />
       <Tab.Screen
         name="Popular movies"
-        component={PopularMovies}
+        component={PopularAndDetailsScreenNavigation}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused, size, color }) => (
             <FontAwesome name="film" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarIcon: ({ focused, size, color }) => (
+            <FontAwesome name="home" size={size} color={color} />
           ),
         }}
       />

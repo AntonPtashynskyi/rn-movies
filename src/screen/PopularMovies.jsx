@@ -1,22 +1,22 @@
-import { Inter_100Thin } from "@expo-google-fonts/inter";
 import React, { useEffect } from "react";
 
-import { View, StyleSheet, ScrollView } from "react-native";
+import { View, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 
 import { useFetchPopularMoviesQuery } from "../../redux/movieApi";
 import { MovieCard } from "./MovieCard";
 
 export default function PopularMovies() {
-  const data = useFetchPopularMoviesQuery();
+  const { data, isLoading } = useFetchPopularMoviesQuery();
 
   let movies;
 
-  if (data.currentData) {
-    movies = data.currentData.results;
+  if (data) {
+    movies = data.results;
   }
 
   return (
     <View style={styles.moviesContainer}>
+      {isLoading && <ActivityIndicator size="large" style={styles.loader} />}
       {data && (
         <ScrollView
           style={styles.container}
@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    marginTop: 50,
   },
   image: {
     width: 120,
@@ -53,17 +54,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
   },
+  loader: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
-
-// Object {
-//   "adult": false,
-//   "backdrop_path": "/jVGHRpSgtE2MQLJhC5q4lXmPNQW.jpg",
-//   "genre_ids": Array [
-//     27,
-//     53,
-//     28,
-//   ],
-//   "id": 960258,
-//   "original_language": "en",
-//   "original_title": "Shark Bait",
-//   "overview": "A group of friends enjoying a weekend steal a couple of jetskis raci...(truncated to the first 10000 characters)

@@ -8,9 +8,11 @@ import {
   TouchableOpacity,
   Keyboard,
   TouchableWithoutFeedback,
+  Image,
 } from "react-native";
 
 import { setAuthName } from "../../redux/authSlice";
+import { Inter_200ExtraLight } from "@expo-google-fonts/inter";
 
 export default function LoginScreen() {
   const [name, setName] = useState("");
@@ -24,7 +26,11 @@ export default function LoginScreen() {
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
       <View style={styles.container}>
-        <Text style={styles.formTitle}>Enter your name</Text>
+        <Image
+          source={require("../images/1280px-Tmdb.new.logo.svg.png")}
+          style={styles.image}
+        />
+        {/* <Text style={styles.formTitle}>Enter your name</Text> */}
         <View style={styles.loginFormWrapper}>
           <TextInput
             style={styles.input}
@@ -32,6 +38,7 @@ export default function LoginScreen() {
             autoCapitalize={"characters"}
             onChangeText={(value) => setName(value)}
             value={name}
+            placeholder={"Enter your name"}
           />
           <TouchableOpacity
             style={styles.button}
@@ -78,5 +85,10 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#fff",
+  },
+  image: {
+    width: 200,
+    height: 200,
+    resizeMode: "contain",
   },
 });

@@ -11,7 +11,10 @@ export const authSlice = createSlice({
     setAuthName: (state, action) => {
       state.name = action.payload;
     },
+    logOut: (state, action) => {
+      state.name = action.payload;
+    },
   },
 });
 
-export const { setAuthName } = authSlice.actions;
+export const { setAuthName, logOut } = authSlice.actions;
