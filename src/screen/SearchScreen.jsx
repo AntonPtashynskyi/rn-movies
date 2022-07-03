@@ -14,6 +14,7 @@ import {
   TouchableWithoutFeedback,
   ScrollView,
   ActivityIndicator,
+  FlatList,
 } from "react-native";
 
 import { useFetchSearchMoviesQuery } from "../../redux/movieApi";
@@ -21,8 +22,9 @@ import { MovieCard } from "./MovieCard";
 
 export default function SearchScreen() {
   const [inputValue, setInputValue] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const { name } = useSelector((state) => state.name);
-  const { data, isLoading } = useFetchSearchMoviesQuery(inputValue);
+  const { data, isLoading } = useFetchSearchMoviesQuery(searchValue);
 
   let movies;
 
@@ -30,14 +32,24 @@ export default function SearchScreen() {
     movies = data.results;
   }
 
+  const handleEndOfScroll = () => {
+    console.log("end");
+  };
+
   const keyBoardHide = () => {
+    setSearchValue(inputValue);
     Keyboard.dismiss();
   };
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <View style={{ alignItems: "center", marginTop: 50 }}>
-        <View style={styles.searchContainer}>
+      <ScrollView
+        style={{ marginTop: 50 }}
+        contentContainerStyle={{
+          alignItems: "center",
+        }}
+      >
+        <View>
           <KeyboardAvoidingView
             behavior={Platform.OS == "ios" ? "padding" : "height"}
           >
@@ -66,7 +78,8 @@ export default function SearchScreen() {
                   </Text>
                 </TouchableOpacity>
               </View>
-              {isLoading && <Text style={styles.motto}> Let's search</Text>}
+              {!movies && <Text style={styles.motto}> Let's search</Text>}
+              {isLoading && <ActivityIndicator size="large" />}
             </View>
           </KeyboardAvoidingView>
 
@@ -77,6 +90,15 @@ export default function SearchScreen() {
                 style={styles.scrollView}
                 contentContainerStyle={styles.scrollViewContainer}
                 showsVerticalScrollIndicator={false}
+                onMomentumScrollEnd={(e) => {
+                  const scrollPosition = e.nativeEvent.contentOffset.y;
+                  const scrollViewHeight =
+                    e.nativeEvent.layoutMeasurement.height;
+                  const contentHeight = e.nativeEvent.contentSize.height;
+                  const isScrolledToBottom = scrollViewHeight + scrollPosition;
+
+                  console.log(isScrolledToBottom);
+                }}
               >
                 {movies &&
                   movies.map((item) => (
@@ -86,7 +108,7 @@ export default function SearchScreen() {
             )}
           </View>
         </View>
-      </View>
+      </ScrollView>
     </TouchableWithoutFeedback>
   );
 }
@@ -101,11 +123,11 @@ const styles = StyleSheet.create({
     padding: 10,
     marginLeft: 10,
   },
-  searchContainer: {},
+
   inputWrapper: {
     opacity: 1,
     marginHorizontal: 20,
-    marginVertical: 10,
+    marginVertical: 5,
     justifyContent: "flex-start",
     alignItems: "center",
   },

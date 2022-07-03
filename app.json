@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "rn-movie",
-    "slug": "rn-movie",
+    "slug": "movie-application",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/icon.png",
@@ -14,18 +14,23 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.fattony.movieapplication"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.fattony.movieapplication"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Mobile aplication The Movie Database for searching movies"
   }
 }

@@ -1,4 +1,3 @@
-import { Inter_200ExtraLight } from "@expo-google-fonts/inter";
 import { View, Text, Image, StyleSheet, ScrollView } from "react-native";
 
 export const MovieDetailsCard = ({ data }) => {
@@ -8,16 +7,20 @@ export const MovieDetailsCard = ({ data }) => {
   return (
     <ScrollView>
       <Image
-        source={{
-          uri: `${imagePath}${movie.backdrop_path}`,
-        }}
+        source={
+          movie.backdrop_path
+            ? { uri: `${imagePath}${movie.backdrop_path}` }
+            : require("../images/1280px-Tmdb.new.logo.svg.png")
+        }
         style={styles.cover}
       />
       <View style={styles.container}>
         <Image
-          source={{
-            uri: `${imagePath}${movie.poster_path}`,
-          }}
+          source={
+            movie.poster_path
+              ? { uri: `${imagePath}${movie.poster_path}` }
+              : require("../images/default-movie.png")
+          }
           style={styles.image}
         />
         <View style={styles.statsContainer}>
@@ -34,7 +37,10 @@ export const MovieDetailsCard = ({ data }) => {
             <Text style={styles.textTitle}>Genres:</Text>
             <ScrollView>
               {movie.genres.map((item) => (
-                <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+                <View
+                  style={{ flexDirection: "row", flexWrap: "wrap" }}
+                  key={item.id}
+                >
                   <Text style={styles.genresItem}>{item.name}</Text>
                 </View>
               ))}

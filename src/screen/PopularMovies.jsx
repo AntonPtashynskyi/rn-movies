@@ -1,12 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 
-import { View, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
+import {
+  View,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+  FlatList,
+} from "react-native";
 
 import { useFetchPopularMoviesQuery } from "../../redux/movieApi";
 import { MovieCard } from "./MovieCard";
 
 export default function PopularMovies() {
-  const { data, isLoading } = useFetchPopularMoviesQuery();
+  const [page, setPage] = useState(1);
+  const { data, isLoading } = useFetchPopularMoviesQuery(page);
+
+  const loadMore = () => {
+    setPage((prevState) => prevState + 1);
+  };
 
   let movies;
 
@@ -27,11 +38,21 @@ export default function PopularMovies() {
             movies.map((item) => <MovieCard movie={item} key={item.id} />)}
         </ScrollView>
       )}
+      {/* <FlatList
+        data={movies}
+        style={styles.container}
+        numColumns={3}
+        contentContainerStyle={styles.scrollViewContainer}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={(item) => <MovieCard currMove={item} style={styles.item} />}
+        onEndReached={loadMore}
+      /> */}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  item: { aspectRatio: 1, width: "100%", flex: 1 },
   moviesContainer: {
     flex: 1,
     alignItems: "center",
