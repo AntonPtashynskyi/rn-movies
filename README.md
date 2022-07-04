@@ -11,7 +11,7 @@ application was made using such technology as:
 - Redux Toolkit also RTK Query for async requests
 
 ### How to run? 
--  <code>npm init</code>
+-  <code>npm install</code>
 - starting developing <code>npm start</code>
 
 
